@@ -1,14 +1,14 @@
 # @author Jason Goecke
 module Tropo
-  class Generator 
+  class Generator
     include Tropo::Helpers
-    
+
     ##
-    # Set a couple of Booleans to indicate the session type as a convenience 
+    # Set a couple of Booleans to indicate the session type as a convenience
     # Set a default voice for speech synthesis
     # Set a default recognizer for speech recognition
     attr_reader :voice_session, :text_session, :voice, :recognizer
-    
+
     ##
     # Defines the actions on self so that we may call them individually
     #
@@ -19,7 +19,7 @@ module Tropo
         g.send(method_id, *args, &block)
       end
     end
-    
+
     ##
     # Initializes the Generator class
     #
@@ -36,7 +36,7 @@ module Tropo
       @response = { :tropo => Array.new }
       @voice = params[:voice] if params[:voice]
       @recognizer = params[:recognizer] if params[:recognizer]
-      
+
       if block_given?
         # Lets us know were are in the midst of building a block, so we only rendor the JSON
         # response at the end of executing the block, rather than at each action
@@ -45,10 +45,10 @@ module Tropo
         render_response
       end
     end
-    
+
     ##
-    # Prompts the user (audio file or text to speech) and optionally waits for a response from the user. 
-    # If collected, responses may be in the form of DTMF, speech recognition or text using a grammar or 
+    # Prompts the user (audio file or text to speech) and optionally waits for a response from the user.
+    # If collected, responses may be in the form of DTMF, speech recognition or text using a grammar or
     # free-form text.
     #
     # @overload ask(params)
@@ -83,7 +83,7 @@ module Tropo
       render_response if @building.nil?
     end
     alias :prompt :ask
-    
+
     ##
     # Prompts initiates a new call. May only be used when no call is active.
     #
@@ -94,7 +94,7 @@ module Tropo
     #   @option params [optional, String] :network which network the call will be initiated with, such as SMS
     #   @option params [optional, String] :channel the channel the call will be initiated over, may be TEXT or VOICE
     #   @option params [optional, Integer] :timeout (30) the amount of time, in seconds, to wait for a response before moving on
-    #   @option params [optional, Boolean] :answer_on_media (true) 
+    #   @option params [optional, Boolean] :answer_on_media (true)
     #   @options params [optional, Hash] :headers A set of key/values to apply as customer SIP headers to the outgoing call
     #   @options params [optional, Hash] :recording Refer to the recording method for paramaters in the hash
     # @overload ask(params, &block)
@@ -105,7 +105,7 @@ module Tropo
     #   @option params [optional, String] :network which network the call will be initiated with, such as SMS
     #   @option params [optional, String] :channel the channel the call will be initiated over, may be TEXT or VOICE
     #   @option params [optional, Integer] :timeout (30) the amount of time, in seconds, to wait for a response before moving on
-    #   @option params [optional, Boolean] :answer_on_media (true) 
+    #   @option params [optional, Boolean] :answer_on_media (true)
     #   @options params [optional, Hash] :headers A set of key/values to apply as customer SIP headers to the outgoing call
     #   @options params [optional, Hash] :recording Refer to the recording method for paramaters in the hash
     # @return [String, nil] the JSON string to be passed back to Tropo or nil
@@ -121,7 +121,7 @@ module Tropo
       end
       render_response if @building.nil?
     end
-    
+
     ##
     # Choices to give the user on input
     #
@@ -134,7 +134,7 @@ module Tropo
     #   if the method has been called from inside a block
     def choices(params={})
       hash = build_action('choices', params)
-      
+
       if @nested_hash
         @nested_hash[@nested_name.to_sym].merge!(hash)
       else
@@ -142,7 +142,7 @@ module Tropo
         render_response if @building.nil?
       end
     end
-    
+
     ##
     # Creates a conference or pushes a user to an existing conference
     #
@@ -176,7 +176,7 @@ module Tropo
       end
       render_response if @building.nil?
     end
-    
+
     ##
     # This function instructs Tropo to "hang-up" or disconnect the current session.
     #
@@ -188,10 +188,10 @@ module Tropo
     #   if the method has been called from inside a block
     def hangup
       @response[:tropo] << { :hangup => nil }
-      render_response if @building.nil? 
+      render_response if @building.nil?
     end
     alias :disconnect :hangup
-    
+
     ##
     # Message initiates a new message to a destination and then hangs up on that destination. Also takes a say method
     # in order to deliver a message to that desintation and then hangup.
@@ -203,7 +203,7 @@ module Tropo
     #   @option params [optional, String] :network which network the call will be initiated with, such as SMS
     #   @option params [optional, String] :channel the channel the call will be initiated over, may be TEXT or VOICE
     #   @option params [optional, Integer] :timeout (30) the amount of time, in seconds, to wait for a response before moving on
-    #   @option params [optional, Boolean] :answer_on_media (true) 
+    #   @option params [optional, Boolean] :answer_on_media (true)
     #   @options params [optional, Hash] :headers A set of key/values to apply as customer SIP headers to the outgoing call
     #   @options params [optional, Hash] :recording Refer to the recording method for paramaters in the hash
     # @overload ask(params, &block)
@@ -214,7 +214,7 @@ module Tropo
     #   @option params [optional, String] :network which network the call will be initiated with, such as SMS
     #   @option params [optional, String] :channel the channel the call will be initiated over, may be TEXT or VOICE
     #   @option params [optional, Integer] :timeout (30) the amount of time, in seconds, to wait for a response before moving on
-    #   @option params [optional, Boolean] :answer_on_media (true) 
+    #   @option params [optional, Boolean] :answer_on_media (true)
     #   @options params [optional, Hash] :headers A set of key/values to apply as customer SIP headers to the outgoing call
     #   @options params [optional, Hash] :recording Refer to the recording method for paramaters in the hash
     # @return [String, nil] the JSON string to be passed back to Tropo or nil
@@ -230,7 +230,7 @@ module Tropo
       end
       render_response if @building.nil?
     end
-    
+
     ##
     # Sets event handlers to call a REST resource when a particular event occurs
     #
@@ -266,7 +266,7 @@ module Tropo
     end
 
     ##
-    # Parses the JSON string recieved from Tropo into a Ruby Hash, or 
+    # Parses the JSON string recieved from Tropo into a Ruby Hash, or
     # if already a Ruby Hash parses it with the nicities provided by
     # the gem
     #
@@ -278,12 +278,12 @@ module Tropo
       # Check to see what type of response we are working with
       if response['session']
         transformed_response = { 'session' => { } }
-        
+
         response['session'].each_pair do |key, value|
           value = transform_hash value if value.kind_of? Hash
           transformed_response['session'].merge!(transform_pair(key, value))
         end
-        
+
       elsif response['result']
         transformed_response = { 'result' => { } }
 
@@ -296,7 +296,7 @@ module Tropo
 
       transformed_response = Hashie::Mash.new(transformed_response)
     end
-    
+
     ##
     # Sets the default recognizer for the object
     #
@@ -304,12 +304,12 @@ module Tropo
     def recognizer=(recognizer)
       @recognizer = recognizer
     end
-    
+
     ##
-    # Plays a prompt (audio file or text to speech) and optionally waits for a response from the caller that is recorded. 
-    # If collected, responses may be in the form of DTMF or speech recognition using a simple grammar format defined below. 
-    # The record funtion is really an alias of the prompt function, but one which forces the record option to true regardless of how it is (or is not) initially set. 
-    # At the conclusion of the recording, the audio file may be automatically sent to an external server via FTP or an HTTP POST/Multipart Form. 
+    # Plays a prompt (audio file or text to speech) and optionally waits for a response from the caller that is recorded.
+    # If collected, responses may be in the form of DTMF or speech recognition using a simple grammar format defined below.
+    # The record funtion is really an alias of the prompt function, but one which forces the record option to true regardless of how it is (or is not) initially set.
+    # At the conclusion of the recording, the audio file may be automatically sent to an external server via FTP or an HTTP POST/Multipart Form.
     # If specified, the audio file may also be transcribed and the text returned to you via an email address or HTTP POST/Multipart Form.
     #
     # @overload record(params)
@@ -342,10 +342,10 @@ module Tropo
       end
       render_response if @building.nil?
     end
-    
+
     ##
-    # The redirect function forwards an incoming call to another destination / phone number before answering it. 
-    # The redirect function must be called before answer is called; redirect expects that a call be in the ringing or answering state. 
+    # The redirect function forwards an incoming call to another destination / phone number before answering it.
+    # The redirect function must be called before answer is called; redirect expects that a call be in the ringing or answering state.
     # Use transfer when working with active answered calls.
     #
     #  tel: classic phone number (See RFC 2896), must be proceeded by a + and the country code (ie - +14155551212 for a US #)
@@ -361,10 +361,10 @@ module Tropo
       @response[:tropo] << hash
       render_response if @building.nil?
     end
-    
+
     ##
-    # Allows Tropo applications to reject incoming calls before they are answered. 
-    # For example, an application could inspect the callerID variable to determine if the caller is known, 
+    # Allows Tropo applications to reject incoming calls before they are answered.
+    # For example, an application could inspect the callerID variable to determine if the caller is known,
     # and then use the reject call accordingly.
     #
     # @return [String, nil] the JSON string to reject the current session or nil
@@ -373,15 +373,15 @@ module Tropo
       @response[:tropo] << { :reject => nil }
       render_response if @building.nil?
     end
-    
+
     ##
     # Renders the JSON string to be sent to Tropo to execute a set of actions
     #
     # @return [String] the JSON string to be sent to the Tropo Remote API
     def response
-      @response.to_json
+      @response.to_json(:ascii_only => true)
     end
-    
+
     ##
     # Resets the action hash if one desires to reuse the same Generator object
     #
@@ -391,7 +391,7 @@ module Tropo
       @voice_session = false
       @text_session = false
     end
-    
+
     ##
     # Plays a prompt (audio file, text to speech or text for IM/SMS). There is no ability to wait for a response from a user.
     # An audio file used for playback may be in one of the following two formats:
@@ -415,7 +415,7 @@ module Tropo
     #   @return [String, nil] the JSON string to be passed back to Tropo or nil
     #     if the method has been called from inside a block
     def say(value=nil, params={})
-      
+
       # This will allow a string to be passed to the say, as opposed to always having to specify a :value key/pair,
       # or still allow a hash or Array to be passed as well
       if value.kind_of? String
@@ -427,7 +427,7 @@ module Tropo
       else
         raise ArgumentError, "An invalid paramater type #{value.class} has been passed"
       end
-      
+
       response = { :say => Array.new }
 
       if params.kind_of? Array
@@ -441,7 +441,7 @@ module Tropo
         hash = build_action('say', params)
         response[:say] << hash
       end
-      
+
       if @nested_hash && @nested_on_hash.nil?
         @nested_hash[@nested_name.to_sym].merge!(response)
       elsif @nested_on_hash
@@ -452,9 +452,9 @@ module Tropo
         render_response if @building.nil?
       end
     end
-    
+
     ##
-    # Allows Tropo applications to begin recording the current session. 
+    # Allows Tropo applications to begin recording the current session.
     # The resulting recording may then be sent via FTP or an HTTP POST/Multipart Form.
     #
     # @param [Hash] params the options to create a message with.
@@ -475,7 +475,7 @@ module Tropo
       end
       render_response if @building.nil?
     end
-    
+
     ##
     # Stops the recording of the current session after startCallRecording has been called
     #
@@ -485,10 +485,10 @@ module Tropo
       @response[:tropo] << { :stopRecording => nil }
       render_response if @building.nil?
     end
-    
+
     ##
-    # Transfers an already answered call to another destination / phone number. 
-    # Call may be transferred to another phone number or SIP address, which is set through the "to" parameter and is in URL format. 
+    # Transfers an already answered call to another destination / phone number.
+    # Call may be transferred to another phone number or SIP address, which is set through the "to" parameter and is in URL format.
     # Supported formats include:
     #  tel: classic phone number (See RFC 2896), must be proceeded by a + and the country code (ie - +14155551212 for a US #)
     #  sip: SIP protocol address
@@ -532,7 +532,7 @@ module Tropo
       end
       render_response if @building.nil?
     end
-    
+
     ##
     # Returns the current hash object of the response, as opposed to JSON
     #
@@ -540,7 +540,7 @@ module Tropo
     def to_hash
       @response
     end
-    
+
     ##
     # Sets the default voice for the object
     #
@@ -550,3 +550,4 @@ module Tropo
     end
   end
 end
+
